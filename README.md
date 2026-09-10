@@ -42,3 +42,22 @@ cp .env.example .env   # fill in connection settings
 Republishing upserts by id, increments `decks.rev`, and soft-deletes notes and files that disappeared from the source tree. Set `FLASHCARDS_MEDIA_ROOT` (or `--media-root`) to copy blobs onto a share.
 
 Do not commit `.env`.
+
+## Sync server
+
+The Boox app talks to this, not to Postgres.
+
+```bash
+.venv/bin/python sync_server.py
+```
+
+Listens on `0.0.0.0:8787`. Optional `FLASHCARDS_SYNC_TOKEN`. Set `FLASHCARDS_MEDIA_ROOT` so images can be fetched.
+
+## Android client
+
+```bash
+cd app
+flutter run
+```
+
+In Settings, set the server to `http://<unraid-lan-ip>:8787`. Sync pulls decks whose `rev` is newer than the local copy. Reviews use FSRS on the device and keep state keyed by note id. No page-turn animations; large rating buttons.
